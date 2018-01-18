@@ -6,4 +6,5 @@ package com.awesome.open.api;
  * @since 17.01.2018
  */
 public class OpenApiBuilder {
+
 }
