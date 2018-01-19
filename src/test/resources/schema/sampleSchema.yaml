@@ -10,6 +10,7 @@ paths:
   /pets:
     get:
       summary: List all pets
+      description: List all pets description
       operationId: listPets
       tags:
         - pets

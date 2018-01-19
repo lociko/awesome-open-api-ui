@@ -1,5 +1,6 @@
 package com.awesome.open.api;
 
+import java.io.Writer;
 import java.util.Objects;
 
 /**
@@ -9,5 +10,5 @@ import java.util.Objects;
  */
 public interface TemplateProcessor {
 
-    Object processor(String location, Object o);
+    Writer process(String location, Object o);
 }

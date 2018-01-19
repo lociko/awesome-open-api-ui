@@ -1,11 +1,8 @@
 package com.awesome.open.api;
 
-import io.swagger.models.Response;
-import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.junit.Test;
 
-import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import static org.junit.Assert.*;
@@ -24,7 +21,7 @@ public class MustacheTemplateLoaderTest {
 
         StringWriter writer = new StringWriter();
         TemplateProcessor processor = new MustacheTemplateProcessor(writer);
-        processor.processor("mustacheTemplates/sampleTemplate.mustache", info);
+        processor.process("mustacheTemplates/sampleTemplate.mustache", info);
 
         assertEquals(writer.toString(),
                 "# Test API\r\n" +

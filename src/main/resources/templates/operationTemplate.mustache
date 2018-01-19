@@ -1,0 +1,31 @@
+## {{summary}}
+{{description}}
+
+### Request
+{{request.description}}
+
+#### Request parameters
+Name|Parameter type| Value type|Description
+--|--|--|--
+{{#parameters}}
+{{name}}|{{in}}|{{schema.type}}|{{description}}
+{{/parameters}}
+
+#### Request comnent types
+
+### Responce
+{{responce.description}}
+
+#### Responce status codes
+
+
+{{#responses}}
+{{#entrySet}}
+**Status code: {{key}}**
+
+{{value.description}}
+#### Responce content types
+
+{{/entrySet}}
+{{/responses}}
+

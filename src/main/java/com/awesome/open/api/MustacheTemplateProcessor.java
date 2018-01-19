@@ -3,14 +3,12 @@ package com.awesome.open.api;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import io.swagger.v3.oas.models.examples.Example;
+import com.github.mustachejava.reflect.ReflectionObjectHandler;
+import com.github.mustachejava.reflect.SimpleObjectHandler;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringReader;
 import java.io.Writer;
+import java.util.Map;
 
 /**
  * @author Vasyl Spachynskyi
@@ -25,8 +23,10 @@ public class MustacheTemplateProcessor implements TemplateProcessor {
         this.writer = writer;
     }
 
-    public Object processor(String location, Object objectToProcess) {
-        MustacheFactory mf = new DefaultMustacheFactory();
+    public Writer process(String location, Object objectToProcess) {
+        DefaultMustacheFactory mf = new DefaultMustacheFactory();
+        mf.setObjectHandler(new MapMethodReflectionHandler());
+
         Mustache mustache = mf.compile(location);
 
         try {
@@ -35,6 +35,13 @@ public class MustacheTemplateProcessor implements TemplateProcessor {
             e.printStackTrace();
         }
 
-        return null;
+        return writer;
+    }
+
+    private class MapMethodReflectionHandler extends ReflectionObjectHandler {
+        @Override
+        protected boolean areMethodsAccessible(Map<?, ?> map) {
+            return true;
+        }
     }
 }
