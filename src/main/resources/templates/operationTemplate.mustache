@@ -1,31 +1,36 @@
-## {{summary}}
-{{description}}
 
-### Request
-{{request.description}}
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">
+        <button type="button" class="btn btn-success"><strong>{{path}}</strong></button> {{operation.summary}}
+    </h4>
 
-#### Request parameters
-Name|Parameter type| Value type|Description
---|--|--|--
-{{#parameters}}
-{{name}}|{{in}}|{{schema.type}}|{{description}}
-{{/parameters}}
+</div>
+<hr>
+{{operation.description}}
 
-#### Request comnent types
+<h4>Request</h4>
+{{operation.request.description}}
 
-### Responce
-{{responce.description}}
+<h5>Parameters</h5>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">In</th>
+        <th scope="col">Type</th>
+        <th scope="col">Desciption</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#operation.parameters}}
+    <tr>
+        <td>{{name}}</td>
+        <td>{{in}}</td>
+        <td>{{schema.type}}</td>
+        <td>{{description}}</td>
+    </tr>
+    {{/operation.parameters}}
+    </tbody>
+</table>
 
-#### Responce status codes
-
-
-{{#responses}}
-{{#entrySet}}
-**Status code: {{key}}**
-
-{{value.description}}
-#### Responce content types
-
-{{/entrySet}}
-{{/responses}}
-
+<h4>Responses</h4>

@@ -11,6 +11,12 @@ import io.swagger.v3.oas.models.OpenAPI;
 public class OpenApiSchemaLoader {
 
     public OpenAPI read(String location) {
-        return new OpenAPIParser().readLocation(location, null, null).getOpenAPI();
+        OpenAPI openAPI =  new OpenAPIParser().readLocation(location, null, null).getOpenAPI();
+        schemaPostProcessing(openAPI);
+        return openAPI;
+    }
+
+    private void schemaPostProcessing(OpenAPI openAPI) {
+        new OpenApiSchemaProcessor().visit(openAPI);
     }
 }

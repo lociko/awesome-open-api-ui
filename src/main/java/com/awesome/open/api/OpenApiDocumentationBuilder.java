@@ -1,10 +1,14 @@
 package com.awesome.open.api;
 
-import io.swagger.v3.oas.models.Operation;
+import com.awesome.open.api.model.OperationTemplateObject;
+import com.awesome.open.api.model.TagTemplateObject;
+import io.swagger.v3.oas.models.OpenAPI;
 
+import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Vasyl Spachynskyi
@@ -13,27 +17,45 @@ import java.util.List;
  */
 public class OpenApiDocumentationBuilder {
 
-    private List<Operation> operations = new ArrayList<Operation>();
-    private TemplateProcessor templateProcessor;
+    private OpenAPI openAPI;
 
-    public OpenApiDocumentationBuilder(TemplateProcessor templateProcessor) {
-        this.templateProcessor = templateProcessor;
+    public OpenApiDocumentationBuilder() {
     }
 
-    public OpenApiDocumentationBuilder init() {
+    public OpenApiDocumentationBuilder init(OpenAPI openAPI) {
+        this.openAPI = openAPI;
+
         return this;
     }
 
-    public OpenApiDocumentationBuilder addOperation(Operation operation) {
-        operations.add(operation);
-        return this;
+    public Writer build() {
+        Map<String, Object> scopes = new HashMap<String, Object>();
+        scopes.put("body", buildTags(openAPI));
+
+        return MustacheTemplateProcessor.getInstans().process("templates/baseTemplate.mustache", scopes);
     }
 
-    public void build() {
+    private Writer buildTags(OpenAPI openAPI) {
+        List<TagTemplateObject> tagTemplateObjects = new TagTemplateObjectBuilder().build(openAPI);
 
-        for (Operation operation : operations) {
-            templateProcessor.process("templates/operationTemplate.mustache", operation);
+        StringWriter resultWriter = new StringWriter();
+        for (TagTemplateObject templateObject : tagTemplateObjects) {
+            resultWriter.append(MustacheTemplateProcessor.getInstans()
+                    .process("templates/tagTemplate.mustache", templateObject.getTag()).toString());
+
+            resultWriter.append(buildOperations(templateObject).toString());
+
         }
+        return resultWriter;
+    }
 
+    private Writer buildOperations(TagTemplateObject templateObject) {
+        StringWriter resultWriter = new StringWriter();
+
+        for (OperationTemplateObject operation : templateObject.getOperations()) {
+            resultWriter.append(MustacheTemplateProcessor.getInstans()
+                    .process("templates/operationTemplate.mustache", operation).toString());
+        }
+        return resultWriter;
     }
 }
